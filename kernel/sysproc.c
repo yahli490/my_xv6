@@ -28,6 +28,23 @@ sys_fork(void)
 }
 
 uint64
+sys_trace(void)
+{
+  int n;
+  argint(0, &n); 
+  struct proc *p = myproc();
+  p->tcode = n; 
+  return 0;
+}
+
+uint64
+sys_sysinfo(void)
+{
+  printf("DONE\n"); 
+  return 0; 
+}
+
+uint64
 sys_wait(void)
 {
   uint64 p;
