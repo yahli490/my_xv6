@@ -60,9 +60,10 @@ pgaccess_test()
     err("pgaccess failed");
   buf[PGSIZE * 1] += 1;
   buf[PGSIZE * 2] += 1;
-  buf[PGSIZE * 30] += 1;
+  buf[PGSIZE * 30] += 1; 
   if (pgaccess(buf, 32, &abits) < 0)
     err("pgaccess failed");
+  printf("NABZ: %d\n", abits); 
   if (abits != ((1 << 1) | (1 << 2) | (1 << 30)))
     err("incorrect access bits set");
   free(buf);

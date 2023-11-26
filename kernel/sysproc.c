@@ -74,7 +74,34 @@ sys_sleep(void)
 int
 sys_pgaccess(void)
 {
-  // lab pgtbl: your code here.
+  //char*, uint, uint*
+  int len = 0;  
+  uint64 addr, bitmask; 
+  argaddr(0, &addr); 
+  argint(1, &len);
+  argaddr(2, &bitmask); 
+  //printf("%d : %d : %p\n", len, bitmask, addr);
+
+  //Check which pages were accessed: 
+  int arrlen = (len + 7) / 8, mod8 = 0;  
+  char ans[arrlen];
+  for (int i = 0; i < arrlen; ++i) ans[i] = 0; 
+  
+  int index = 0; 
+  for (int i = 0; i < len; ++i){
+    if (page_accessed(myproc()->pagetable, addr + PGSIZE * i)){
+      ans[index] |= 1 << mod8;
+    } 
+
+    mod8 += 1;
+    if(mod8 == 8){
+      mod8 = 0; 
+      index += 1; 
+    } 
+  }
+
+  //return the result: 
+  copyout(myproc()->pagetable, bitmask, ans, sizeof(char)*arrlen); 
   return 0;
 }
 #endif

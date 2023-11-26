@@ -204,6 +204,13 @@ uvmcreate()
   return pagetable;
 }
 
+
+int page_accessed(pagetable_t pagetable, uint64 addr){
+  pte_t *pte = walk(pagetable, addr, 0); 
+  if (!(*pte & PTE_A)) return 0;
+  *pte ^= PTE_A; 
+  return 1;  
+}
 // Load the user initcode into address 0 of pagetable,
 // for the very first process.
 // sz must be less than a page.
